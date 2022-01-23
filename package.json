@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -21,8 +23,15 @@
   },
   "homepage": "https://github.com/Abdulrahman-Elsheikh/resizing-images-api#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.15",
+    "prettier": "^2.5.1",
     "ts-node": "^10.4.0",
+    "tslib": "^2.3.1",
     "typescript": "^4.5.5"
   }
 }
