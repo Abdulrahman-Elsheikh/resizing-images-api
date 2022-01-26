@@ -19,13 +19,13 @@ const resize = async (
   }_${reqWidth}_${reqHeight}.jpg`;
   const resizedImagePath = path.join(resizedFolder, resizedImage);
 
-  if (fs.existsSync(path.join(folderName, fileName))) {
+  if (fs.existsSync(resizedImagePath)) {
+    res.sendFile(resizedImagePath);
+  } else {
     await sharp(path.join(folderName, fileName))
       .resize(reqWidth, reqHeight)
       .toFile(resizedImagePath);
     res.sendFile(resizedImagePath);
-  } else {
-    res.send('invalid');
   }
 };
 
