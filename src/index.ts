@@ -2,6 +2,8 @@
 import express, { Application, Request, Response } from 'express';
 // Import The Resizing Route
 import route from './routes/route';
+// Import The Clear Route
+import clear from './routes/clear';
 
 // Create App From Express
 const app: Application = express();
@@ -10,6 +12,9 @@ const port = 3000;
 
 // Using The Resizing Route In The Application
 app.use('/start', route);
+
+// Reset The Application Using Clear Route
+app.use('/clear', clear);
 
 // Create The Main GET Request
 app.get('/', (_req: Request, res: Response) => {
