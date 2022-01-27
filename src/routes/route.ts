@@ -10,11 +10,14 @@ const route = express.Router();
 route.use('/', resize);
 
 // Create GET Request
-route.get('/', async (req, res) => {
-  const resizedImage = (await resize(req, res)) as unknown as string;
-  console.log('resized');
-  res.sendFile(resizedImage);
-});
+route.get(
+  '/',
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    const resizedImage = (await resize(req, res)) as unknown as string;
+    console.log('resized');
+    res.sendFile(resizedImage);
+  }
+);
 
 // Export The Resizing Route
 export default route;

@@ -7,7 +7,7 @@ import path from 'path';
 
 // Create The Resized Images Folder
 export const createResizedFolder = async (): Promise<string> => {
-  const folderName = await getFolderName(__dirname);
+  const folderName: string = await getFolderName(__dirname);
   let resizedFolder = '';
   const folderContents: string[] = fs.readdirSync(folderName);
   if (folderContents.includes('resized')) {

@@ -2,14 +2,12 @@
 import express from 'express';
 // Import The Image Folder Name Function
 import { getFolderName } from './getImagesFolder';
-// Import The Function For Creating New Resized Image Folder
-import { createResizedFolder } from './createResizedFolder';
-// Import Sharp Package To Resize Images
-import sharp from 'sharp';
 // Import The Path Package
 import path from 'path';
 // Import The fs-extra Package To Deal With File System
 import fs from 'fs-extra';
+// Import The Resizing Function
+import { resizingImage } from './resizeFunc';
 
 // Create Resize Function
 const resize = async (
@@ -17,11 +15,12 @@ const resize = async (
   res: express.Response
 ): Promise<void> => {
   // Get The Image Folder Name
-  const folderName = await getFolderName(__dirname);
+  const folderName: string = await getFolderName(__dirname);
   // Get The Listed Images Names
-  const listedImages = fs.readdirSync(folderName);
+  const listedImages: string[] = fs.readdirSync(folderName);
   // Create The Resized Images Folder
-  const resizedFolder = await createResizedFolder();
+  // const resizedFolder = await createResizedFolder();
+  const resizedFolder: string = path.join(folderName, 'resized');
   // Get The Required Image To Resize
   const fileName = `${req.query.filename as string}.jpg`;
   // Get The Required Width To Resize
@@ -33,10 +32,10 @@ const resize = async (
     req.query.filename as string
   }_W${reqWidth}_H${reqHeight}.jpg`;
   // Get The Resized Image Path
-  let resizedImagePath = path.join(resizedFolder, resizedImage);
+  let resizedImagePath: string = path.join(resizedFolder, resizedImage);
 
   // Check If The File Name Exists
-  if (req.query.filename === undefined) {
+  if ((req.query.filename as string) === undefined) {
     res.send('You must enter a filename from the list');
   }
   // Check If The Image From The List
@@ -68,9 +67,7 @@ const resize = async (
     }
     // Resizing The Required Image
     else {
-      await sharp(path.join(folderName, fileName))
-        .resize(reqWidth, reqHeight)
-        .toFile(resizedImagePath);
+      await resizingImage(req.query.filename as string, reqWidth, reqHeight);
       res.sendFile(resizedImagePath);
     }
   }
