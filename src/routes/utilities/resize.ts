@@ -45,7 +45,10 @@ const resize = async (
   } else {
     // Check If The Required Width & Height Exists
     if (!reqWidth && !reqHeight) {
-      res.send('Restart The Server & Please enter a width and height');
+      reqWidth = null;
+      reqHeight = null;
+      resizedImage = `${req.query.filename as string}_Original.jpg`;
+      resizedImagePath = path.join(resizedFolder, resizedImage);
     }
     // Condition Of Missing The Required Width
     else if (!reqWidth || isNaN(reqWidth)) {
