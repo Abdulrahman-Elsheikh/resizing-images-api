@@ -1,4 +1,6 @@
+// Import Supertest Package
 import supertest from 'supertest';
+// Import Application
 import app from '../index';
 // Import The Image Folder Name Function
 import { getFolderName } from '../routes/utilities/getImagesFolder';
@@ -6,6 +8,8 @@ import { getFolderName } from '../routes/utilities/getImagesFolder';
 import path from 'path';
 // Import The fs-extra Package To Deal With File System
 import fs from 'fs-extra';
+// Import The Resizing Function
+import { resizingImage } from '../routes/utilities/resizeFunc';
 
 const request = supertest(app);
 
@@ -64,6 +68,41 @@ describe('Test Resizing Route', () => {
     const resizedFolder = path.join(ImagesFolder, 'resized');
     const resizedImage = path.join(resizedFolder, 'fjord_W100_H100.jpg');
     expect(response.status).toBe(200);
+    expect(fs.existsSync(resizedImage)).toBeTruthy;
+  });
+});
+
+describe('Test Resizing Function', () => {
+  it('Resizing Without Width Or Height', async () => {
+    const resizing = await resizingImage('palmtunnel', null, null);
+    const ImagesFolder = await getFolderName(__dirname);
+    const resizedFolder = path.join(ImagesFolder, 'resized');
+    const resizedImage = path.join(resizedFolder, 'palmtunnel_Original.jpg');
+    expect(resizing).toBe(resizedImage);
+    expect(fs.existsSync(resizedImage)).toBeTruthy;
+  });
+  it('Resizing With Height & No Or Invalid Width', async () => {
+    const resizing = await resizingImage('palmtunnel', null, 100);
+    const ImagesFolder = await getFolderName(__dirname);
+    const resizedFolder = path.join(ImagesFolder, 'resized');
+    const resizedImage = path.join(resizedFolder, 'palmtunnel_H100.jpg');
+    expect(resizing).toBe(resizedImage);
+    expect(fs.existsSync(resizedImage)).toBeTruthy;
+  });
+  it('Resizing With Width & No Or Invalid Height', async () => {
+    const resizing = await resizingImage('palmtunnel', 100, null);
+    const ImagesFolder = await getFolderName(__dirname);
+    const resizedFolder = path.join(ImagesFolder, 'resized');
+    const resizedImage = path.join(resizedFolder, 'palmtunnel_W100.jpg');
+    expect(resizing).toBe(resizedImage);
+    expect(fs.existsSync(resizedImage)).toBeTruthy;
+  });
+  it('Resizing With Width & Height', async () => {
+    const resizing = await resizingImage('palmtunnel', 100, 100);
+    const ImagesFolder = await getFolderName(__dirname);
+    const resizedFolder = path.join(ImagesFolder, 'resized');
+    const resizedImage = path.join(resizedFolder, 'palmtunnel_W100_H100.jpg');
+    expect(resizing).toBe(resizedImage);
     expect(fs.existsSync(resizedImage)).toBeTruthy;
   });
 });
